@@ -1,70 +1,43 @@
-console.clear();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let produtos = [];
 let carrinho = [];
-
 const FRETE = 10;
 
-// =============================
-// INÍCIO
-// =============================
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", carregarProdutos);
 
-function init() {
-  carregarProdutos();
-}
-
-// =============================
-// FIREBASE (VOCÊ VAI COLOCAR AQUI)
-// =============================
 async function carregarProdutos() {
-  // 🔥 SUBSTITUA PELO SEU FIREBASE REAL
-  const snapshot = await buscarDoFirebase();
+  const snapshot = await getDocs(collection(db, "produtos"));
 
-  produtos = snapshot.map(normalizarProduto);
+  produtos = snapshot.docs.map(doc => {
+    const data = doc.data();
+
+    return {
+      id: doc.id,
+      nome: data.nome,
+      categoria: data.categoria,
+      descricao: data.descricao,
+      foto: data.foto,
+      preco: Number(data.preco)
+    };
+  });
 
   renderProdutos();
 }
 
-// =============================
-// SIMULAÇÃO (REMOVE QUANDO USAR FIREBASE REAL)
-// =============================
-async function buscarDoFirebase() {
-  return [
-    {
-      id: "1",
-      nome: "Churro Chocolate",
-      categoria: "Chocolate",
-      preco: "14.99",
-      foto: "https://via.placeholder.com/100"
-    },
-    {
-      id: "2",
-      nome: "Coca-Cola",
-      categoria: "Bebidas",
-      preco: "5.79",
-      foto: "https://via.placeholder.com/100"
-    }
-  ];
-}
-
-// =============================
-// NORMALIZAÇÃO (ESSENCIAL)
-// =============================
-function normalizarProduto(p) {
-  return {
-    id: p.id,
-    nome: p.nome,
-    categoria: p.categoria,
-    descricao: p.descricao,
-    foto: p.foto,
-    preco: Number(p.preco)
-  };
-}
-
-// =============================
-// PRODUTOS
-// =============================
 function renderProdutos() {
   const el = document.getElementById("produtos");
   el.innerHTML = "";
@@ -91,11 +64,9 @@ function renderProdutos() {
   });
 }
 
-// =============================
-// CARRINHO
-// =============================
 function adicionar(id) {
   const item = produtos.find(p => p.id === id);
+
   if (!item) return;
 
   const existente = carrinho.find(p => p.id === id);
@@ -116,6 +87,7 @@ function remover(id) {
 
 function alterarQtd(id, delta) {
   const item = carrinho.find(p => p.id === id);
+
   if (!item) return;
 
   item.qtd += delta;
@@ -127,9 +99,6 @@ function alterarQtd(id, delta) {
   renderCarrinho();
 }
 
-// =============================
-// RENDER CARRINHO
-// =============================
 function renderCarrinho() {
   const el = document.getElementById("carrinho");
   const totalEl = document.getElementById("total");
@@ -144,7 +113,7 @@ function renderCarrinho() {
     el.innerHTML += `
       <div class="carrinho-item">
         ${item.nome} - R$ ${item.preco.toFixed(2)}
-        
+
         <button onclick="alterarQtd('${item.id}', -1)">-</button>
         ${item.qtd}
         <button onclick="alterarQtd('${item.id}', 1)">+</button>
@@ -154,14 +123,9 @@ function renderCarrinho() {
     `;
   });
 
-  totalEl.innerHTML = `
-    Total: R$ ${(total + FRETE).toFixed(2)}
-  `;
+  totalEl.innerHTML = `Total: R$ ${(total + FRETE).toFixed(2)}`;
 }
 
-// =============================
-// WHATSAPP
-// =============================
 function finalizarPedido() {
   let msg = "🍩 Pedido Panela & Canela:%0A%0A";
 
@@ -170,11 +134,12 @@ function finalizarPedido() {
   });
 
   msg += `%0AFrete: R$ ${FRETE.toFixed(2)}`;
-  msg += `%0ATotal: R$ ${calcularTotal().toFixed(2)}`;
+  msg += `%0ATotal: R$ ${carrinho.reduce((a, i) => a + i.preco * i.qtd, 0) + FRETE}`;
 
   window.open(`https://wa.me/SEUNUMERO?text=${msg}`);
 }
 
-function calcularTotal() {
-  return carrinho.reduce((acc, i) => acc + i.preco * i.qtd, 0) + FRETE;
-}
+window.adicionar = adicionar;
+window.remover = remover;
+window.alterarQtd = alterarQtd;
+window.finalizarPedido = finalizarPedido;
