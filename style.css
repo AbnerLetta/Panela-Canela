@@ -1,9 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #fafafa;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Cabeçalho */
+.topo {
+  background: #8B4513;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  max-width: 80px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Ícones */
+.icone-carrinho,
+.icone-entrega,
+.icone-pagamento,
+.icone-promocao,
+.icone-usuario {
+  width: 32px;
+  height: 32px;
+  margin: 5px;
+}
+
+/* Categorias */
+.categoria {
+  margin: 30px 20px;
+}
+
+.categoria h2 {
+  color: #A0522D;
+  font-size: 20px;
+  margin-bottom: 15px;
+  border-left: 5px solid #A0522D;
+  padding-left: 10px;
+}
+
+/* Grid de produtos */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
+/* Card de produto */
 .card-produto {
   background: white;
   border-radius: 10px;
@@ -21,6 +83,7 @@
   transform: translateY(-4px);
 }
 
+/* Imagem do produto */
 .produto-foto {
   width: 150px;
   height: 150px;
@@ -29,6 +92,7 @@
   margin-bottom: 10px;
 }
 
+/* Texto do produto */
 .card-produto h3 {
   font-size: 18px;
   margin: 8px 0;
@@ -55,6 +119,7 @@
   margin: 8px 0;
 }
 
+/* Controles de quantidade */
 .controles {
   display: flex;
   justify-content: center;
@@ -80,4 +145,50 @@
 .controles span {
   font-size: 16px;
   font-weight: bold;
+}
+
+/* Formulário de pedido */
+.pedido {
+  margin: 30px 20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input, select, textarea, button {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+button {
+  background: #8B4513;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #A0522D;
+}
+
+/* Rodapé */
+.rodape {
+  background: #8B4513;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }

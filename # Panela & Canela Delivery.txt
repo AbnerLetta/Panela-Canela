@@ -1,0 +1,14 @@
+# Panela & Canela Delivery
+
+Aplicativo simples para pedidos via WhatsApp, feito em HTML, CSS e JavaScript.
+
+## Estrutura
+- index.html → página principal
+- style.css → estilos
+- script.js → lógica de interação
+- assets/imagens → imagens dos produtos
+- assets/icones → ícones extras
+
+## Deploy
+O site está publicado via GitHub Pages:
+https://abnerletta.github.io/Panela-Canela/

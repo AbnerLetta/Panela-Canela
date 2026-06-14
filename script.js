@@ -1,148 +1,60 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// Função para atualizar quantidade
+function atualizarQuantidade(botao, incremento) {
+  const card = botao.closest('.card-produto');
+  const span = card.querySelector('.controles span');
+  let quantidade = parseInt(span.textContent);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAvoVJwVefB6B5Igtm13sG2pR3Q7Nk5rVo",
-  authDomain: "panela-canela.firebaseapp.com",
-  projectId: "panela-canela",
-  storageBucket: "panela-canela.appspot.com",
-  messagingSenderId: "293544912065",
-  appId: "1:293544912065:web:7841f7e26b7c367a026040"
-};
+  quantidade += incremento;
+  if (quantidade < 0) quantidade = 0; // não deixa negativo
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Renderizar cardápio agrupado por categoria
-async function listarProdutos() {
-  const snapshot = await getDocs(collection(db, "produtos"));
-  const container = document.getElementById("produtos");
-  container.innerHTML = "";
-
-  const categorias = {};
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    if (!categorias[data.categoria]) {
-      categorias[data.categoria] = [];
-    }
-    categorias[data.categoria].push(data);
-  });
-
-  Object.keys(categorias).forEach(cat => {
-    const bloco = document.createElement("div");
-    bloco.className = "categoria";
-
-    const titulo = document.createElement("h2");
-    titulo.textContent = cat;
-    bloco.appendChild(titulo);
-
-    const grid = document.createElement("div");
-    grid.className = "grid-produtos";
-
-    categorias[cat].forEach(data => {
-      const card = document.createElement("div");
-      card.className = "card-produto";
-
-      let quantidade = 0;
-
-      const foto = document.createElement("img");
-      foto.src = data.foto;
-      foto.alt = data.nome;
-      foto.className = "produto-foto";
-
-      const nome = document.createElement("h3");
-      nome.textContent = data.nome;
-
-      const descricao = document.createElement("p");
-      descricao.textContent = data.descricao;
-
-      const preco = document.createElement("p");
-      preco.className = "preco";
-      preco.textContent = `R$${data.preco.toFixed(2)}`;
-
-      const controles = document.createElement("div");
-      controles.className = "controles";
-
-      const menos = document.createElement("button");
-      menos.textContent = "-";
-      menos.onclick = () => {
-        if (quantidade > 0) {
-          quantidade--;
-          qtd.textContent = quantidade;
-        }
-      };
-
-      const mais = document.createElement("button");
-      mais.textContent = "+";
-      mais.onclick = () => {
-        quantidade++;
-        qtd.textContent = quantidade;
-      };
-
-      const qtd = document.createElement("span");
-      qtd.textContent = quantidade;
-
-      controles.appendChild(menos);
-      controles.appendChild(qtd);
-      controles.appendChild(mais);
-
-      card.appendChild(foto);
-      card.appendChild(nome);
-      card.appendChild(descricao);
-      card.appendChild(preco);
-      card.appendChild(controles);
-
-      grid.appendChild(card);
-
-      card.dataset.nome = data.nome;
-      card.dataset.preco = data.preco;
-      card.dataset.qtdSpan = qtd;
-    });
-
-    bloco.appendChild(grid);
-    container.appendChild(bloco);
-  });
+  span.textContent = quantidade;
 }
 
-// Enviar pedido para WhatsApp
-document.getElementById("pedidoForm").addEventListener("submit", (e) => {
+// Adiciona eventos aos botões
+document.querySelectorAll('.card-produto .controles button').forEach(botao => {
+  botao.addEventListener('click', () => {
+    if (botao.textContent === '+') {
+      atualizarQuantidade(botao, 1);
+    } else {
+      atualizarQuantidade(botao, -1);
+    }
+  });
+});
+
+// Envio do pedido para WhatsApp
+document.getElementById('pedidoForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  const nomeCliente = document.getElementById("nomeCliente").value;
-  const enderecoCliente = document.getElementById("enderecoCliente").value;
-  const formaPagamento = document.getElementById("formaPagamento").value;
-  const frete = document.getElementById("frete").value;
-  const observacoesCliente = document.getElementById("observacoesCliente").value;
 
-  let mensagem = `🧾 CUPOM - Panela & Canela\n\n`;
-  mensagem += `Cliente: ${nomeCliente}\n`;
-  mensagem += `Endereço: ${enderecoCliente}\n`;
-  mensagem += `Pagamento: ${formaPagamento}\n`;
-  mensagem += `Entrega: ${frete}\n\nItens:\n`;
+  const nome = document.getElementById('nomeCliente').value;
+  const endereco = document.getElementById('enderecoCliente').value;
+  const pagamento = document.getElementById('formaPagamento').value;
+  const frete = document.getElementById('frete').value;
+  const observacoes = document.getElementById('observacoesCliente').value;
 
-  let total = 0;
-
-  document.querySelectorAll(".card-produto").forEach(prod => {
-    const qtd = parseInt(prod.querySelector(".controles span").textContent);
-    const preco = parseFloat(prod.dataset.preco);
-    if (qtd > 0) {
-      const subtotal = qtd * preco;
-      total += subtotal;
-      mensagem += `- ${prod.dataset.nome} x${qtd} = R$${subtotal.toFixed(2)}\n`;
+  // Monta resumo dos produtos
+  let resumoProdutos = '';
+  document.querySelectorAll('.card-produto').forEach(card => {
+    const nomeProduto = card.querySelector('h3').textContent;
+    const quantidade = parseInt(card.querySelector('.controles span').textContent);
+    if (quantidade > 0) {
+      resumoProdutos += `${nomeProduto} x${quantidade}\n`;
     }
   });
 
-  mensagem += `\nTOTAL: R$${total.toFixed(2)}\n`;
+  const mensagem = 
+    `Pedido Panela & Canela\n\n` +
+    `Cliente: ${nome}\n` +
+    `Endereço: ${endereco}\n` +
+    `Pagamento: ${pagamento}\n` +
+    `Entrega: ${frete}\n\n` +
+    `Produtos:\n${resumoProdutos}\n` +
+    `Observações: ${observacoes}`;
 
-  if (observacoesCliente.trim() !== "") {
-    mensagem += `\nObservações: ${observacoesCliente}\n`;
-  }
+  // 🔑 Configure aqui o número do WhatsApp (com DDI e DDD)
+  const numeroWhatsApp = "5511999999999"; 
+  // Exemplo: 55 (Brasil) + 11 (DDD São Paulo) + número
 
-  mensagem += `\nObrigado pelo pedido! 🙌`;
-
-  const numeroLoja = "5511925572150";
-  const url = `https://wa.me/${numeroLoja}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, "_blank");
+  // Abre WhatsApp com mensagem
+  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, '_blank');
 });
-
-// Inicializar
-listarProdutos();
