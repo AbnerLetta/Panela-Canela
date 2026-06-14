@@ -1,4 +1,4 @@
-console.log("JS CARREGOU COM SUCESSO");
+console.log("JS carregou");
 
 // =========================
 // BANCO DE DADOS
@@ -10,18 +10,28 @@ const DB = {
       id: 1,
       nome: "Churro Festeiro",
       preco: 12.99,
+      categoria: "Tradicionais",
       img: "https://via.placeholder.com/120"
     },
     {
       id: 2,
-      nome: "Churro Chocolate",
-      preco: 14.99,
+      nome: "Churro Doce de Leite",
+      preco: 13.99,
+      categoria: "Tradicionais",
       img: "https://via.placeholder.com/120"
     },
     {
       id: 3,
-      nome: "Churro Doce de Leite",
-      preco: 13.99,
+      nome: "Churro Chocolate",
+      preco: 14.99,
+      categoria: "Chocolate",
+      img: "https://via.placeholder.com/120"
+    },
+    {
+      id: 4,
+      nome: "Churro Chocolate Branco",
+      preco: 15.99,
+      categoria: "Chocolate",
       img: "https://via.placeholder.com/120"
     }
   ]
@@ -33,7 +43,7 @@ const DB = {
 let carrinho = [];
 
 // =========================
-// INÍCIO
+// INICIAR
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
   render();
@@ -48,21 +58,33 @@ function render() {
 }
 
 // =========================
-// PRODUTOS
+// PRODUTOS POR CATEGORIA
 // =========================
 function renderProdutos() {
   const el = document.getElementById("produtos");
   el.innerHTML = "";
 
-  DB.produtos.forEach(produto => {
+  const categorias = [...new Set(DB.produtos.map(p => p.categoria))];
+
+  categorias.forEach(cat => {
     el.innerHTML += `
-      <div class="produto">
-        <img src="${produto.img}" alt="${produto.nome}">
-        <h3>${produto.nome}</h3>
-        <p>R$ ${produto.preco.toFixed(2)}</p>
-        <button onclick="adicionar(${produto.id})">Adicionar</button>
-      </div>
+      <h3 class="categoria">${cat}</h3>
     `;
+
+    DB.produtos
+      .filter(p => p.categoria === cat)
+      .forEach(produto => {
+        el.innerHTML += `
+          <div class="produto">
+            <img src="${produto.img}">
+            <div class="info">
+              <h4>${produto.nome}</h4>
+              <p>R$ ${produto.preco.toFixed(2)}</p>
+            </div>
+            <button onclick="adicionar(${produto.id})">+</button>
+          </div>
+        `;
+      });
   });
 }
 
@@ -97,8 +119,9 @@ function renderCarrinho() {
 
     el.innerHTML += `
       <div class="item">
-        <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
-        <button onclick="remover(${index})">X</button>
+        <span>${item.nome}</span>
+        <span>R$ ${item.preco.toFixed(2)}</span>
+        <button onclick="remover(${index})">x</button>
       </div>
     `;
   });
