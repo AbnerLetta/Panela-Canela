@@ -1,58 +1,9 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: #fafafa;
-  color: #333;
-  line-height: 1.4;
-}
-
-/* Cabeçalho */
-.topo {
-  background: #8B4513;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.logo {
-  max-width: 100px;
-  display: block;
-  margin: 0 auto 10px auto;
-}
-
-h1 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-/* Categorias */
-.categoria {
-  margin: 30px 20px;
-}
-
-.categoria h2 {
-  color: #A0522D;
-  font-size: 20px;
-  margin-bottom: 15px;
-  border-left: 5px solid #A0522D;
-  padding-left: 10px;
-}
-
-/* Grid de produtos */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
-/* Card de produto padronizado */
 .card-produto {
   background: white;
   border-radius: 10px;
@@ -63,15 +14,13 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  height: 360px; /* altura fixa */
+  height: 360px;
 }
 
 .card-produto:hover {
   transform: translateY(-4px);
 }
 
-/* Imagem padronizada */
 .produto-foto {
   width: 150px;
   height: 150px;
@@ -80,15 +29,13 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Texto do produto */
 .card-produto h3 {
   font-size: 18px;
   margin: 8px 0;
   color: #333;
-  min-height: 40px; /* reserva espaço para títulos */
+  min-height: 40px;
 }
 
-/* Limitar descrição a 2 linhas */
 .card-produto p {
   font-size: 14px;
   margin: 5px 0;
@@ -98,7 +45,7 @@ h1 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 40px; /* reserva espaço para descrições */
+  min-height: 40px;
 }
 
 .preco {
@@ -108,12 +55,11 @@ h1 {
   margin: 8px 0;
 }
 
-/* Controles de quantidade */
 .controles {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: auto; /* empurra controles para o fim do card */
+  margin-top: auto;
 }
 
 .controles button {
@@ -134,46 +80,4 @@ h1 {
 .controles span {
   font-size: 16px;
   font-weight: bold;
-}
-
-/* Formulário de pedido */
-.pedido {
-  margin: 30px 20px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-input, select, textarea, button {
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-button {
-  background: #8B4513;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #A0522D;
-}
-
-/* Rodapé */
-.rodape {
-  background: #8B4513;
-  color: white;
-  text-align: center;
-  padding: 12px;
-  margin-top: 40px;
 }
