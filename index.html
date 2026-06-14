@@ -9,26 +9,32 @@
 
 <body>
 
-  <header>
-    <h1>🍩 Panela & Canela</h1>
-  </header>
+<header>
+  <h1>🍩 Panela & Canela</h1>
+</header>
 
-  <main>
+<main>
 
-    <section class="produtos">
-      <h2>Cardápio</h2>
-      <div id="produtos"></div>
-    </section>
+  <section>
+    <h2>Cardápio</h2>
+    <div id="produtos"></div>
+  </section>
 
-    <section class="carrinho">
-      <h2>Seu Pedido</h2>
-      <div id="carrinho"></div>
-      <h3 id="total"></h3>
-    </section>
+  <section>
+    <h2>Seu Pedido</h2>
 
-  </main>
+    <div id="carrinho"></div>
 
-  <script src="./script.js"></script>
+    <h3 id="total"></h3>
+
+    <button onclick="finalizarPedido()" class="whats">
+      Finalizar no WhatsApp
+    </button>
+  </section>
+
+</main>
+
+<script src="./script.js"></script>
 
 </body>
 </html>

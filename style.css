@@ -12,58 +12,35 @@ header {
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
   padding: 15px;
 }
 
-section {
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* CATEGORIA */
-.categoria {
-  background: #ff7a00;
-  color: white;
-  padding: 6px;
-  border-radius: 6px;
-  margin-top: 15px;
-}
-
-/* PRODUTO */
 .produto {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-}
-
-.produto img {
-  width: 50px;
+  background: white;
+  padding: 10px;
+  margin-bottom: 8px;
   border-radius: 8px;
 }
 
-.info {
-  flex: 1;
-  margin-left: 10px;
-}
-
-/* BOTÃO */
-button {
-  background: #ff7a00;
-  color: white;
-  border: none;
-  padding: 6px 10px;
+.carrinho-item {
+  background: white;
+  margin-bottom: 5px;
+  padding: 8px;
   border-radius: 6px;
 }
 
-/* CARRINHO */
-.item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
+button {
+  margin: 0 5px;
+}
+
+.whats {
+  background: green;
+  color: white;
+  padding: 10px;
+  border: none;
+  width: 100%;
+  margin-top: 10px;
 }
