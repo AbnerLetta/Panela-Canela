@@ -1,4 +1,7 @@
-let DB = {
+// =========================
+// BANCO DE DADOS
+// =========================
+const DB = {
   frete: 10.00,
   produtos: [
     {
@@ -9,95 +12,97 @@ let DB = {
     },
     {
       id: 2,
-      nome: "Churros Avelã",
-      preco: 12.99,
+      nome: "Churro de Chocolate",
+      preco: 14.99,
       img: "https://via.placeholder.com/100"
     },
     {
       id: 3,
-      nome: "Coca-Cola Zero",
-      preco: 6.00,
+      nome: "Churro de Doce de Leite",
+      preco: 13.99,
       img: "https://via.placeholder.com/100"
     }
-  ],
-  carrinho: []
+  ]
 };
 
-// 🛒 ADICIONAR AO CARRINHO
-function adicionarAoCarrinho(id) {
-  const produto = DB.produtos.find(p => p.id === id);
+// =========================
+// CARRINHO
+// =========================
+let carrinho = [];
 
-  const item = DB.carrinho.find(i => i.id === id);
-
-  if (item) {
-    item.qtd++;
-  } else {
-    DB.carrinho.push({
-      id: produto.id,
-      nome: produto.nome,
-      preco: produto.preco,
-      img: produto.img,
-      qtd: 1
-    });
-  }
-
+// =========================
+// INICIAR
+// =========================
+window.addEventListener("DOMContentLoaded", () => {
   render();
-}
+});
 
-// 📦 PRODUTOS
-function renderProdutos() {
-  const el = document.getElementById("produtos");
-
-  el.innerHTML = "";
-
-  DB.produtos.forEach(p => {
-    el.innerHTML += `
-      <div class="card">
-        <img src="${p.img}">
-        <div>
-          <strong>${p.nome}</strong><br>
-          R$ ${p.preco.toFixed(2)}
-        </div>
-        <button onclick="adicionarAoCarrinho(${p.id})">Adicionar</button>
-      </div>
-    `;
-  });
-}
-
-// 🧾 CARRINHO
-function renderCarrinho() {
-  const el = document.getElementById("carrinho");
-
-  el.innerHTML = "";
-
-  let subtotal = 0;
-
-  DB.carrinho.forEach(item => {
-    subtotal += item.preco * item.qtd;
-
-    el.innerHTML += `
-      <div class="item">
-        <span>${item.nome} (${item.qtd}x)</span>
-        <span>R$ ${(item.preco * item.qtd).toFixed(2)}</span>
-      </div>
-    `;
-  });
-
-  let total = subtotal + DB.frete;
-
-  el.innerHTML += `
-    <hr>
-    <p>Subtotal: R$ ${subtotal.toFixed(2)}</p>
-    <p>Frete: R$ ${DB.frete.toFixed(2)}</p>
-    <h3>Total: R$ ${total.toFixed(2)}</h3>
-  `;
-}
-
-// 🔄 RENDER GERAL
+// =========================
+// RENDER GERAL
+// =========================
 function render() {
   renderProdutos();
   renderCarrinho();
 }
 
-// 🚀 INICIAR
-render();
+// =========================
+// PRODUTOS
+// =========================
+function renderProdutos() {
+  const container = document.getElementById("produtos");
+  container.innerHTML = "";
+
+  DB.produtos.forEach(produto => {
+    container.innerHTML += `
+      <div class="produto">
+        <img src="${produto.img}" width="80">
+        <h3>${produto.nome}</h3>
+        <p>R$ ${produto.preco.toFixed(2)}</p>
+        <button onclick="addCarrinho(${produto.id})">Adicionar</button>
+      </div>
+    `;
+  });
+}
+
+// =========================
+// ADICIONAR NO CARRINHO
+// =========================
+function addCarrinho(id) {
+  const item = DB.produtos.find(p => p.id === id);
+  carrinho.push(item);
+  render();
+}
+
+// =========================
+// REMOVER DO CARRINHO
+// =========================
+function removerItem(index) {
+  carrinho.splice(index, 1);
+  render();
+}
+
+// =========================
+// CARRINHO
+// =========================
+function renderCarrinho() {
+  const container = document.getElementById("carrinho");
+  container.innerHTML = "";
+
+  let subtotal = 0;
+
+  carrinho.forEach((item, index) => {
+    subtotal += item.preco;
+
+    container.innerHTML += `
+      <div class="item-carrinho">
+        <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+        <button onclick="removerItem(${index})">X</button>
+      </div>
+    `;
+  });
+
+  const total = subtotal + DB.frete;
+
+  document.getElementById("total").innerText =
+    `Subtotal: R$ ${subtotal.toFixed(2)} + Frete: R$ ${DB.frete.toFixed(2)} = Total: R$ ${total.toFixed(2)}`;
+}
