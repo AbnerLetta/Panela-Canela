@@ -13,76 +13,87 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Renderizar cardápio com foto, descrição e botões +/-
+// Renderizar cardápio agrupado por categoria
 async function listarProdutos() {
   const snapshot = await getDocs(collection(db, "produtos"));
   const container = document.getElementById("produtos");
   container.innerHTML = "";
 
+  // Agrupar por categoria
+  const categorias = {};
   snapshot.forEach(doc => {
     const data = doc.data();
-    const item = document.createElement("div");
-    item.className = "produto";
+    if (!categorias[data.categoria]) {
+      categorias[data.categoria] = [];
+    }
+    categorias[data.categoria].push(data);
+  });
 
-    let quantidade = 0;
+  // Renderizar cada categoria
+  Object.keys(categorias).forEach(cat => {
+    const bloco = document.createElement("div");
+    bloco.className = "categoria";
 
-    // Foto
-    const foto = document.createElement("img");
-    foto.src = data.foto;
-    foto.alt = data.nome;
-    foto.className = "produto-foto";
+    const titulo = document.createElement("h2");
+    titulo.textContent = cat;
+    bloco.appendChild(titulo);
 
-    // Nome e preço
-    const nomePreco = document.createElement("h3");
-    nomePreco.textContent = `${data.nome} - R$${data.preco.toFixed(2)}`;
+    categorias[cat].forEach(data => {
+      const item = document.createElement("div");
+      item.className = "produto";
 
-    // Categoria
-    const categoria = document.createElement("p");
-    categoria.textContent = `Categoria: ${data.categoria}`;
+      let quantidade = 0;
 
-    // Descrição
-    const descricao = document.createElement("p");
-    descricao.textContent = data.descricao;
+      const foto = document.createElement("img");
+      foto.src = data.foto;
+      foto.alt = data.nome;
+      foto.className = "produto-foto";
 
-    // Botões de quantidade
-    const menos = document.createElement("button");
-    menos.textContent = "-";
-    menos.onclick = () => {
-      if (quantidade > 0) {
-        quantidade--;
+      const nomePreco = document.createElement("h3");
+      nomePreco.textContent = `${data.nome} - R$${data.preco.toFixed(2)}`;
+
+      const descricao = document.createElement("p");
+      descricao.textContent = data.descricao;
+
+      const menos = document.createElement("button");
+      menos.textContent = "-";
+      menos.onclick = () => {
+        if (quantidade > 0) {
+          quantidade--;
+          qtd.textContent = quantidade;
+        }
+      };
+
+      const mais = document.createElement("button");
+      mais.textContent = "+";
+      mais.onclick = () => {
+        quantidade++;
         qtd.textContent = quantidade;
-      }
-    };
+      };
 
-    const mais = document.createElement("button");
-    mais.textContent = "+";
-    mais.onclick = () => {
-      quantidade++;
+      const qtd = document.createElement("span");
       qtd.textContent = quantidade;
-    };
 
-    const qtd = document.createElement("span");
-    qtd.textContent = quantidade;
+      const controles = document.createElement("div");
+      controles.className = "controles";
+      controles.appendChild(menos);
+      controles.appendChild(qtd);
+      controles.appendChild(mais);
 
-    const controles = document.createElement("div");
-    controles.className = "controles";
-    controles.appendChild(menos);
-    controles.appendChild(qtd);
-    controles.appendChild(mais);
+      item.appendChild(foto);
+      item.appendChild(nomePreco);
+      item.appendChild(descricao);
+      item.appendChild(controles);
 
-    // Montar card do produto
-    item.appendChild(foto);
-    item.appendChild(nomePreco);
-    item.appendChild(categoria);
-    item.appendChild(descricao);
-    item.appendChild(controles);
+      bloco.appendChild(item);
 
-    container.appendChild(item);
+      // Guardar no dataset para envio
+      item.dataset.nome = data.nome;
+      item.dataset.preco = data.preco;
+      item.dataset.qtdSpan = qtd;
+    });
 
-    // Guardar no dataset para envio
-    item.dataset.nome = data.nome;
-    item.dataset.preco = data.preco;
-    item.dataset.qtdSpan = qtd;
+    container.appendChild(bloco);
   });
 }
 
