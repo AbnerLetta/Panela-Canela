@@ -15,31 +15,40 @@
   </header>
 
   <!-- Cardápio -->
-  <div id="produtos"></div>
+  <main>
+    <section id="produtos"></section>
+  </main>
 
   <!-- Pedido -->
-  <h2>Fazer Pedido</h2>
-  <form id="pedidoForm">
-    <input type="text" id="nomeCliente" placeholder="Seu nome" required>
-    <input type="text" id="enderecoCliente" placeholder="Endereço completo" required>
+  <section class="pedido">
+    <h2>Fazer Pedido</h2>
+    <form id="pedidoForm">
+      <input type="text" id="nomeCliente" placeholder="Seu nome" required>
+      <input type="text" id="enderecoCliente" placeholder="Endereço completo" required>
 
-    <label for="formaPagamento">Forma de pagamento:</label>
-    <select id="formaPagamento" required>
-      <option value="Dinheiro">Dinheiro</option>
-      <option value="Pix">Pix</option>
-      <option value="Cartão">Cartão</option>
-    </select>
+      <label for="formaPagamento">Forma de pagamento:</label>
+      <select id="formaPagamento" required>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Pix">Pix</option>
+        <option value="Cartão">Cartão</option>
+      </select>
 
-    <label for="frete">Entrega:</label>
-    <select id="frete" required>
-      <option value="Retirada">Retirada na loja</option>
-      <option value="Delivery">Delivery</option>
-    </select>
+      <label for="frete">Entrega:</label>
+      <select id="frete" required>
+        <option value="Retirada">Retirada na loja</option>
+        <option value="Delivery">Delivery</option>
+      </select>
 
-    <textarea id="observacoesCliente" placeholder="Observações (ex.: sem cebola, extra doce)"></textarea>
+      <textarea id="observacoesCliente" placeholder="Observações (ex.: sem cebola, extra doce)"></textarea>
 
-    <button type="submit">Enviar Pedido</button>
-  </form>
+      <button type="submit">Enviar Pedido</button>
+    </form>
+  </section>
+
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <p>© 2026 Panela & Canela Delivery</p>
+  </footer>
 
   <script type="module" src="script.js"></script>
 </body>

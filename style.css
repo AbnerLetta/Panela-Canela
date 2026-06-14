@@ -33,20 +33,31 @@ h1 {
   margin-bottom: 15px;
 }
 
-.produto {
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+.card-produto {
   background: #f5f5f5;
-  padding: 12px;
-  margin: 10px 0;
   border-radius: 8px;
+  padding: 10px;
   text-align: center;
 }
 
 .produto-foto {
-  width: 120px;
+  width: 100%;
   height: 120px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 8px;
+}
+
+.preco {
+  font-weight: bold;
+  color: #8B4513;
+  margin: 5px 0;
 }
 
 .controles {
@@ -62,11 +73,14 @@ h1 {
   font-size: 16px;
 }
 
+.pedido {
+  margin: 20px;
+}
+
 form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 20px;
 }
 
 input, select, textarea, button {
@@ -84,4 +98,12 @@ button {
 
 button:hover {
   background: #A0522D;
+}
+
+.rodape {
+  background: #8B4513;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
 }

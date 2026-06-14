@@ -19,7 +19,6 @@ async function listarProdutos() {
   const container = document.getElementById("produtos");
   container.innerHTML = "";
 
-  // Agrupar por categoria
   const categorias = {};
   snapshot.forEach(doc => {
     const data = doc.data();
@@ -29,7 +28,6 @@ async function listarProdutos() {
     categorias[data.categoria].push(data);
   });
 
-  // Renderizar cada categoria
   Object.keys(categorias).forEach(cat => {
     const bloco = document.createElement("div");
     bloco.className = "categoria";
@@ -38,9 +36,12 @@ async function listarProdutos() {
     titulo.textContent = cat;
     bloco.appendChild(titulo);
 
+    const grid = document.createElement("div");
+    grid.className = "grid-produtos";
+
     categorias[cat].forEach(data => {
-      const item = document.createElement("div");
-      item.className = "produto";
+      const card = document.createElement("div");
+      card.className = "card-produto";
 
       let quantidade = 0;
 
@@ -49,11 +50,18 @@ async function listarProdutos() {
       foto.alt = data.nome;
       foto.className = "produto-foto";
 
-      const nomePreco = document.createElement("h3");
-      nomePreco.textContent = `${data.nome} - R$${data.preco.toFixed(2)}`;
+      const nome = document.createElement("h3");
+      nome.textContent = data.nome;
 
       const descricao = document.createElement("p");
       descricao.textContent = data.descricao;
+
+      const preco = document.createElement("p");
+      preco.className = "preco";
+      preco.textContent = `R$${data.preco.toFixed(2)}`;
+
+      const controles = document.createElement("div");
+      controles.className = "controles";
 
       const menos = document.createElement("button");
       menos.textContent = "-";
@@ -74,25 +82,24 @@ async function listarProdutos() {
       const qtd = document.createElement("span");
       qtd.textContent = quantidade;
 
-      const controles = document.createElement("div");
-      controles.className = "controles";
       controles.appendChild(menos);
       controles.appendChild(qtd);
       controles.appendChild(mais);
 
-      item.appendChild(foto);
-      item.appendChild(nomePreco);
-      item.appendChild(descricao);
-      item.appendChild(controles);
+      card.appendChild(foto);
+      card.appendChild(nome);
+      card.appendChild(descricao);
+      card.appendChild(preco);
+      card.appendChild(controles);
 
-      bloco.appendChild(item);
+      grid.appendChild(card);
 
-      // Guardar no dataset para envio
-      item.dataset.nome = data.nome;
-      item.dataset.preco = data.preco;
-      item.dataset.qtdSpan = qtd;
+      card.dataset.nome = data.nome;
+      card.dataset.preco = data.preco;
+      card.dataset.qtdSpan = qtd;
     });
 
+    bloco.appendChild(grid);
     container.appendChild(bloco);
   });
 }
@@ -114,7 +121,7 @@ document.getElementById("pedidoForm").addEventListener("submit", (e) => {
 
   let total = 0;
 
-  document.querySelectorAll(".produto").forEach(prod => {
+  document.querySelectorAll(".card-produto").forEach(prod => {
     const qtd = parseInt(prod.querySelector(".controles span").textContent);
     const preco = parseFloat(prod.dataset.preco);
     if (qtd > 0) {
