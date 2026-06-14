@@ -1,3 +1,19 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Configuração Firebase
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_BUCKET.appspot.com",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SEU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 // Função para atualizar quantidade
 function atualizarQuantidade(botao, incremento) {
   const card = botao.closest('.card-produto');
@@ -5,21 +21,50 @@ function atualizarQuantidade(botao, incremento) {
   let quantidade = parseInt(span.textContent);
 
   quantidade += incremento;
-  if (quantidade < 0) quantidade = 0; // não deixa negativo
+  if (quantidade < 0) quantidade = 0;
 
   span.textContent = quantidade;
 }
 
-// Adiciona eventos aos botões
-document.querySelectorAll('.card-produto .controles button').forEach(botao => {
-  botao.addEventListener('click', () => {
-    if (botao.textContent === '+') {
-      atualizarQuantidade(botao, 1);
-    } else {
-      atualizarQuantidade(botao, -1);
-    }
+// Renderizar produtos de uma coleção Firebase
+async function carregarProdutos(categoria, containerId) {
+  const querySnapshot = await getDocs(collection(db, categoria));
+  const container = document.getElementById(containerId);
+
+  querySnapshot.forEach((doc) => {
+    const produto = doc.data();
+    const card = document.createElement("div");
+    card.className = "card-produto";
+    card.innerHTML = `
+      <img src="${produto.imagem}" alt="${produto.nome}" class="produto-foto">
+      <h3>${produto.nome}</h3>
+      <p>${produto.descricao}</p>
+      <p class="preco">R$ ${produto.preco}</p>
+      <div class="controles">
+        <button>-</button>
+        <span>0</span>
+        <button>+</button>
+      </div>
+    `;
+    container.appendChild(card);
   });
-});
+
+  // Ativar botões de quantidade após renderização
+  container.querySelectorAll('.controles button').forEach(botao => {
+    botao.addEventListener('click', () => {
+      if (botao.textContent === '+') {
+        atualizarQuantidade(botao, 1);
+      } else {
+        atualizarQuantidade(botao, -1);
+      }
+    });
+  });
+}
+
+// Carregar categorias
+carregarProdutos("churros_gourmet", "produtos-gourmet");
+carregarProdutos("churros_tradicionais", "produtos-tradicionais");
+carregarProdutos("bebidas", "produtos-bebidas");
 
 // Envio do pedido para WhatsApp
 document.getElementById('pedidoForm').addEventListener('submit', function(e) {
@@ -50,11 +95,9 @@ document.getElementById('pedidoForm').addEventListener('submit', function(e) {
     `Produtos:\n${resumoProdutos}\n` +
     `Observações: ${observacoes}`;
 
-  // 🔑 Configure aqui o número do WhatsApp (com DDI e DDD)
-  const numeroWhatsApp = "5511999999999"; 
-  // Exemplo: 55 (Brasil) + 11 (DDD São Paulo) + número
+  // Número do WhatsApp configurado
+  const numeroWhatsApp = "5511925572150"; 
 
-  // Abre WhatsApp com mensagem
   const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');
 });

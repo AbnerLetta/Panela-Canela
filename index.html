@@ -10,74 +10,29 @@
 
   <!-- Cabeçalho -->
   <header class="topo">
-    <img src="assets/imagens/logo.png" alt="Logo Panela & Canela" class="logo">
+    <img src="https://firebasestorage.googleapis.com/v0/b/SEU_BUCKET/o/logo.png?alt=media" 
+         alt="Logo Panela & Canela" class="logo">
     <h1>Panela & Canela Delivery</h1>
     <img src="assets/icones/carrinho.png" alt="Carrinho" class="icone-carrinho">
   </header>
 
   <main>
-    <!-- Categoria Bebidas -->
-    <section class="categoria">
-      <h2>Bebidas</h2>
-      <div class="grid-produtos">
-
-        <div class="card-produto">
-          <img src="assets/imagens/guarana-zero.png" alt="Guaraná Antarctica Zero" class="produto-foto">
-          <h3>Guaraná Antarctica Zero</h3>
-          <p>Guaraná Antarctica Zero. Lata 350ml</p>
-          <p class="preco">R$ 5,79</p>
-          <div class="controles">
-            <button>-</button>
-            <span>0</span>
-            <button>+</button>
-          </div>
-        </div>
-
-        <div class="card-produto">
-          <img src="assets/imagens/agua-crystal.png" alt="Água Crystal 500ml" class="produto-foto">
-          <h3>Água Crystal</h3>
-          <p>Água Crystal Pet 500ml com gás</p>
-          <p class="preco">R$ 4,49</p>
-          <div class="controles">
-            <button>-</button>
-            <span>0</span>
-            <button>+</button>
-          </div>
-        </div>
-
-        <div class="card-produto">
-          <img src="assets/imagens/coca-cola.png" alt="Coca-Cola Lata 350ml" class="produto-foto">
-          <h3>Coca-Cola</h3>
-          <p>Coca-Cola Lata 350ml</p>
-          <p class="preco">R$ 5,79</p>
-          <div class="controles">
-            <button>-</button>
-            <span>0</span>
-            <button>+</button>
-          </div>
-        </div>
-
-      </div>
+    <!-- Categoria Churros Gourmet -->
+    <section class="categoria" id="churros-gourmet">
+      <h2>Churros Gourmet</h2>
+      <div class="grid-produtos" id="produtos-gourmet"></div>
     </section>
 
-    <!-- Categoria Sobremesas -->
-    <section class="categoria">
-      <h2>Sobremesas</h2>
-      <div class="grid-produtos">
+    <!-- Categoria Churros Tradicionais -->
+    <section class="categoria" id="churros-tradicionais">
+      <h2>Churros Tradicionais</h2>
+      <div class="grid-produtos" id="produtos-tradicionais"></div>
+    </section>
 
-        <div class="card-produto">
-          <img src="assets/imagens/churros.png" alt="Churros Festa & Canela" class="produto-foto">
-          <h3>Doce Festa & Canela</h3>
-          <p>Churros crocante com doce de leite</p>
-          <p class="preco">R$ 8,99</p>
-          <div class="controles">
-            <button>-</button>
-            <span>0</span>
-            <button>+</button>
-          </div>
-        </div>
-
-      </div>
+    <!-- Categoria Bebidas -->
+    <section class="categoria" id="bebidas">
+      <h2>Bebidas</h2>
+      <div class="grid-produtos" id="produtos-bebidas"></div>
     </section>
 
     <!-- Formulário de Pedido -->
