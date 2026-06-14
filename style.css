@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+}
+
+header {
+  background: #ff6b00;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+main {
+  padding: 15px;
+}
+
+/* PRODUTOS */
+#produtos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+/* BOTÃO */
+button {
+  background: #ff6b00;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* CARRINHO */
+.carrinho {
+  margin-top: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
