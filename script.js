@@ -2,144 +2,129 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyAvoVJwVefB6B5Igtm13sG2pR3Q7Nk5rVo",
+  authDomain: "panela-canela.firebaseapp.com",
+  projectId: "panela-canela",
+  storageBucket: "panela-canela.appspot.com",
+  messagingSenderId: "293544912065",
+  appId: "1:293544912065:web:7841f7e26b7c367a026040"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let produtos = [];
-let carrinho = [];
-const FRETE = 10;
-
-document.addEventListener("DOMContentLoaded", carregarProdutos);
-
-async function carregarProdutos() {
+// Renderizar cardápio com foto, descrição e botões +/-
+async function listarProdutos() {
   const snapshot = await getDocs(collection(db, "produtos"));
+  const container = document.getElementById("produtos");
+  container.innerHTML = "";
 
-  produtos = snapshot.docs.map(doc => {
+  snapshot.forEach(doc => {
     const data = doc.data();
+    const item = document.createElement("div");
+    item.className = "produto";
 
-    return {
-      id: doc.id,
-      nome: data.nome,
-      categoria: data.categoria,
-      descricao: data.descricao,
-      foto: data.foto,
-      preco: Number(data.preco)
+    let quantidade = 0;
+
+    // Foto
+    const foto = document.createElement("img");
+    foto.src = data.foto;
+    foto.alt = data.nome;
+    foto.className = "produto-foto";
+
+    // Nome e preço
+    const nomePreco = document.createElement("h3");
+    nomePreco.textContent = `${data.nome} - R$${data.preco.toFixed(2)}`;
+
+    // Categoria
+    const categoria = document.createElement("p");
+    categoria.textContent = `Categoria: ${data.categoria}`;
+
+    // Descrição
+    const descricao = document.createElement("p");
+    descricao.textContent = data.descricao;
+
+    // Botões de quantidade
+    const menos = document.createElement("button");
+    menos.textContent = "-";
+    menos.onclick = () => {
+      if (quantidade > 0) {
+        quantidade--;
+        qtd.textContent = quantidade;
+      }
     };
+
+    const mais = document.createElement("button");
+    mais.textContent = "+";
+    mais.onclick = () => {
+      quantidade++;
+      qtd.textContent = quantidade;
+    };
+
+    const qtd = document.createElement("span");
+    qtd.textContent = quantidade;
+
+    const controles = document.createElement("div");
+    controles.className = "controles";
+    controles.appendChild(menos);
+    controles.appendChild(qtd);
+    controles.appendChild(mais);
+
+    // Montar card do produto
+    item.appendChild(foto);
+    item.appendChild(nomePreco);
+    item.appendChild(categoria);
+    item.appendChild(descricao);
+    item.appendChild(controles);
+
+    container.appendChild(item);
+
+    // Guardar no dataset para envio
+    item.dataset.nome = data.nome;
+    item.dataset.preco = data.preco;
+    item.dataset.qtdSpan = qtd;
   });
-
-  renderProdutos();
 }
 
-function renderProdutos() {
-  const el = document.getElementById("produtos");
-  el.innerHTML = "";
+// Enviar pedido para WhatsApp
+document.getElementById("pedidoForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const nomeCliente = document.getElementById("nomeCliente").value;
+  const enderecoCliente = document.getElementById("enderecoCliente").value;
+  const formaPagamento = document.getElementById("formaPagamento").value;
+  const frete = document.getElementById("frete").value;
+  const observacoesCliente = document.getElementById("observacoesCliente").value;
 
-  const categorias = [...new Set(produtos.map(p => p.categoria))];
-
-  categorias.forEach(cat => {
-    el.innerHTML += `<h3>${cat}</h3>`;
-
-    produtos
-      .filter(p => p.categoria === cat)
-      .forEach(p => {
-        el.innerHTML += `
-          <div class="produto">
-            <img src="${p.foto}" width="60">
-            <div>
-              <strong>${p.nome}</strong><br>
-              R$ ${p.preco.toFixed(2)}
-            </div>
-            <button onclick="adicionar('${p.id}')">+</button>
-          </div>
-        `;
-      });
-  });
-}
-
-function adicionar(id) {
-  const item = produtos.find(p => p.id === id);
-
-  if (!item) return;
-
-  const existente = carrinho.find(p => p.id === id);
-
-  if (existente) {
-    existente.qtd += 1;
-  } else {
-    carrinho.push({ ...item, qtd: 1 });
-  }
-
-  renderCarrinho();
-}
-
-function remover(id) {
-  carrinho = carrinho.filter(p => p.id !== id);
-  renderCarrinho();
-}
-
-function alterarQtd(id, delta) {
-  const item = carrinho.find(p => p.id === id);
-
-  if (!item) return;
-
-  item.qtd += delta;
-
-  if (item.qtd <= 0) {
-    remover(id);
-  }
-
-  renderCarrinho();
-}
-
-function renderCarrinho() {
-  const el = document.getElementById("carrinho");
-  const totalEl = document.getElementById("total");
-
-  el.innerHTML = "";
+  let mensagem = `🧾 CUPOM - Panela & Canela\n\n`;
+  mensagem += `Cliente: ${nomeCliente}\n`;
+  mensagem += `Endereço: ${enderecoCliente}\n`;
+  mensagem += `Pagamento: ${formaPagamento}\n`;
+  mensagem += `Entrega: ${frete}\n\nItens:\n`;
 
   let total = 0;
 
-  carrinho.forEach(item => {
-    total += item.preco * item.qtd;
-
-    el.innerHTML += `
-      <div class="carrinho-item">
-        ${item.nome} - R$ ${item.preco.toFixed(2)}
-
-        <button onclick="alterarQtd('${item.id}', -1)">-</button>
-        ${item.qtd}
-        <button onclick="alterarQtd('${item.id}', 1)">+</button>
-
-        <button onclick="remover('${item.id}')">x</button>
-      </div>
-    `;
+  document.querySelectorAll(".produto").forEach(prod => {
+    const qtd = parseInt(prod.querySelector(".controles span").textContent);
+    const preco = parseFloat(prod.dataset.preco);
+    if (qtd > 0) {
+      const subtotal = qtd * preco;
+      total += subtotal;
+      mensagem += `- ${prod.dataset.nome} x${qtd} = R$${subtotal.toFixed(2)}\n`;
+    }
   });
 
-  totalEl.innerHTML = `Total: R$ ${(total + FRETE).toFixed(2)}`;
-}
+  mensagem += `\nTOTAL: R$${total.toFixed(2)}\n`;
 
-function finalizarPedido() {
-  let msg = "🍩 Pedido Panela & Canela:%0A%0A";
+  if (observacoesCliente.trim() !== "") {
+    mensagem += `\nObservações: ${observacoesCliente}\n`;
+  }
 
-  carrinho.forEach(item => {
-    msg += `${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2)}%0A`;
-  });
+  mensagem += `\nObrigado pelo pedido! 🙌`;
 
-  msg += `%0AFrete: R$ ${FRETE.toFixed(2)}`;
-  msg += `%0ATotal: R$ ${carrinho.reduce((a, i) => a + i.preco * i.qtd, 0) + FRETE}`;
+  const numeroLoja = "5511925572150";
+  const url = `https://wa.me/${numeroLoja}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
+});
 
-  window.open(`https://wa.me/SEUNUMERO?text=${msg}`);
-}
-
-window.adicionar = adicionar;
-window.remover = remover;
-window.alterarQtd = alterarQtd;
-window.finalizarPedido = finalizarPedido;
+// Inicializar
+listarProdutos();

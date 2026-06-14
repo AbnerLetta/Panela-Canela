@@ -4,37 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panela & Canela</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
-
 <body>
 
-<header>
-  <h1>🍩 Panela & Canela</h1>
-</header>
+  <!-- Logo -->
+  <header>
+    <img src="assets/imagens/logo.png" alt="Panela & Canela" class="logo">
+    <h1>Cardápio</h1>
+  </header>
 
-<main>
+  <!-- Cardápio -->
+  <div id="produtos"></div>
 
-  <section>
-    <h2>Cardápio</h2>
-    <div id="produtos"></div>
-  </section>
+  <!-- Pedido -->
+  <h2>Fazer Pedido</h2>
+  <form id="pedidoForm">
+    <input type="text" id="nomeCliente" placeholder="Seu nome" required>
+    <input type="text" id="enderecoCliente" placeholder="Endereço completo" required>
 
-  <section>
-    <h2>Seu Pedido</h2>
+    <label for="formaPagamento">Forma de pagamento:</label>
+    <select id="formaPagamento" required>
+      <option value="Dinheiro">Dinheiro</option>
+      <option value="Pix">Pix</option>
+      <option value="Cartão">Cartão</option>
+    </select>
 
-    <div id="carrinho"></div>
+    <label for="frete">Entrega:</label>
+    <select id="frete" required>
+      <option value="Retirada">Retirada na loja</option>
+      <option value="Delivery">Delivery</option>
+    </select>
 
-    <h3 id="total"></h3>
+    <textarea id="observacoesCliente" placeholder="Observações (ex.: sem cebola, extra doce)"></textarea>
 
-    <button onclick="finalizarPedido()" class="whats">
-      Finalizar no WhatsApp
-    </button>
-  </section>
+    <button type="submit">Enviar Pedido</button>
+  </form>
 
-</main>
-
-<script type="module" src="./script.js"></script>
-
+  <script type="module" src="script.js"></script>
 </body>
 </html>
