@@ -11,6 +11,7 @@ body {
   line-height: 1.4;
 }
 
+/* Cabeçalho */
 .topo {
   background: #8B4513;
   color: white;
@@ -31,6 +32,7 @@ h1 {
   font-weight: bold;
 }
 
+/* Categorias */
 .categoria {
   margin: 30px 20px;
 }
@@ -43,12 +45,14 @@ h1 {
   padding-left: 10px;
 }
 
+/* Grid de produtos */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
+/* Card de produto padronizado */
 .card-produto {
   background: white;
   border-radius: 10px;
@@ -59,29 +63,32 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 340px;
+  justify-content: flex-start;
+  height: 360px; /* altura fixa */
 }
 
 .card-produto:hover {
   transform: translateY(-4px);
 }
 
+/* Imagem padronizada */
 .produto-foto {
   width: 150px;
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 10px;
-  display: block;
 }
 
+/* Texto do produto */
 .card-produto h3 {
   font-size: 18px;
   margin: 8px 0;
   color: #333;
+  min-height: 40px; /* reserva espaço para títulos */
 }
 
+/* Limitar descrição a 2 linhas */
 .card-produto p {
   font-size: 14px;
   margin: 5px 0;
@@ -91,6 +98,7 @@ h1 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 40px; /* reserva espaço para descrições */
 }
 
 .preco {
@@ -100,11 +108,12 @@ h1 {
   margin: 8px 0;
 }
 
+/* Controles de quantidade */
 .controles {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: auto; /* empurra controles para o fim do card */
 }
 
 .controles button {
@@ -127,6 +136,7 @@ h1 {
   font-weight: bold;
 }
 
+/* Formulário de pedido */
 .pedido {
   margin: 30px 20px;
   background: #fff;
@@ -159,6 +169,7 @@ button:hover {
   background: #A0522D;
 }
 
+/* Rodapé */
 .rodape {
   background: #8B4513;
   color: white;
